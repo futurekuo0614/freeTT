@@ -19,7 +19,9 @@ export function saveSRTasTXT() {
 
 function triggerDownload(blob, filename) {
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
+  const url = URL.createObjectURL(blob);
+  a.href = url;
   a.download = filename;
   a.click();
+  URL.revokeObjectURL(url);
 }

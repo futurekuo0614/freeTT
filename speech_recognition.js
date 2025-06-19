@@ -1,4 +1,6 @@
-import { translateTextToChinese } from './main.js';
+import { translateTextToChinese, clearSubtitleLog } from './main.js';
+
+let recognition;
 
 export function startSpeechRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -7,7 +9,13 @@ export function startSpeechRecognition() {
     return;
   }
 
-  const recognition = new SpeechRecognition();
+  if (recognition) {
+    return; // already running
+  }
+
+  clearSubtitleLog();
+
+  recognition = new SpeechRecognition();
   recognition.lang = "ja-JP";
   recognition.continuous = true;
   recognition.interimResults = false;
@@ -20,6 +28,14 @@ export function startSpeechRecognition() {
   };
 
   recognition.onerror = (e) => console.error("🔴 語音辨識錯誤", e);
+  recognition.onend = () => { recognition = null; };
 
   recognition.start();
+}
+
+export function stopSpeechRecognition() {
+  if (recognition) {
+    recognition.stop();
+    recognition = null;
+  }
 }
