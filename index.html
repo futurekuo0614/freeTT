@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Teams 日文即時字幕翻譯（部署安全版）</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Teams 日文即時字幕翻譯</h1>
+  <div id="subtitleDisplay"></div>
+  <button id="startBtn">開始翻譯</button>
+  <button onclick="exportSRT()">下載 SRT</button>
+  <button onclick="exportTXT()">下載 TXT</button>
+
+  <!-- 部署後 Vercel 會取代這段 -->
+  <script>
+    window.OPENAI_API_KEY = "%OPENAI_API_KEY%";
+  </script>
+
+  <script type="module">
+    import { startSpeechRecognition } from './speech_recognition.js';
+    import { saveSRT, saveSRTasTXT } from './srt_exporter.js';
+
+    document.getElementById("startBtn").addEventListener("click", startSpeechRecognition);
+    window.exportSRT = saveSRT;
+    window.exportTXT = saveSRTasTXT;
+  </script>
+</body>
+</html>
